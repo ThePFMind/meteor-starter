@@ -16,6 +16,14 @@ sudo service mongod start
 
 SCRIPT
 
+$meteor_config = <<SCRIPT
+# Default (required) Meteor env variables
+echo "export PORT=3000" >> ~/.profile
+echo "export ROOT_URL=http://localhost" >> ~/.profile
+echo "export MONGO_URL=mongodb://127.0.0.1:27017/meteor" >> ~/.profile
+echo "export MAIL_URL=smtp://localhost:25" >> ~/.profile
+SCRIPT
+
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.env.enable
   config.vm.box = "thepfmind/meteor-base"
@@ -35,6 +43,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     mount_options: ["dmode=775,fmode=664"]
 
   config.vm.provision :shell, :inline => $mongo_config
+  config.vm.provision :shell, :inline => $meteor_config
 
   config.vm.provider :virtualbox do |vb|
   #   # Don't boot with headless mode
